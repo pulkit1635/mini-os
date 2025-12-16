@@ -35,11 +35,17 @@ C_SOURCES = $(KERNEL_DIR)/kernel.c \
 			$(KERNEL_DIR)/memory.c \
 			$(KERNEL_DIR)/string.c \
 			$(KERNEL_DIR)/audio.c \
+			$(KERNEL_DIR)/disk.c \
+			$(KERNEL_DIR)/network.c \
+			$(KERNEL_DIR)/gui.c \
 			$(KERNEL_DIR)/shell.c \
 			$(KERNEL_DIR)/apps/notepad.c \
 			$(KERNEL_DIR)/apps/css.c \
 			$(KERNEL_DIR)/apps/javascript.c \
-			$(KERNEL_DIR)/apps/browser.c
+			$(KERNEL_DIR)/apps/browser.c \
+			$(KERNEL_DIR)/apps/diskmgr.c \
+			$(KERNEL_DIR)/apps/settings.c \
+			$(KERNEL_DIR)/apps/sysmon.c
 
 # Object files
 ASM_OBJECTS = $(BUILD_DIR)/boot.o
@@ -98,15 +104,21 @@ clean:
 .PHONY: all iso run run-iso debug clean
 
 # Dependencies
-$(BUILD_DIR)/kernel.o: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/kernel.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/idt.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/shell.h $(KERNEL_DIR)/io.h
+$(BUILD_DIR)/kernel.o: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/kernel.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/idt.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/shell.h $(KERNEL_DIR)/io.h $(KERNEL_DIR)/disk.h $(KERNEL_DIR)/network.h $(KERNEL_DIR)/gui.h $(KERNEL_DIR)/audio.h
 $(BUILD_DIR)/vga.o: $(KERNEL_DIR)/vga.c $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/io.h $(KERNEL_DIR)/string.h
 $(BUILD_DIR)/idt.o: $(KERNEL_DIR)/idt.c $(KERNEL_DIR)/idt.h $(KERNEL_DIR)/io.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/string.h
 $(BUILD_DIR)/keyboard.o: $(KERNEL_DIR)/keyboard.c $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/idt.h $(KERNEL_DIR)/io.h $(KERNEL_DIR)/vga.h
 $(BUILD_DIR)/memory.o: $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/string.h
 $(BUILD_DIR)/string.o: $(KERNEL_DIR)/string.c $(KERNEL_DIR)/string.h
-$(BUILD_DIR)/shell.o: $(KERNEL_DIR)/shell.c $(KERNEL_DIR)/shell.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/apps/notepad.h $(KERNEL_DIR)/apps/browser.h
+$(BUILD_DIR)/shell.o: $(KERNEL_DIR)/shell.c $(KERNEL_DIR)/shell.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/disk.h $(KERNEL_DIR)/network.h $(KERNEL_DIR)/gui.h $(KERNEL_DIR)/audio.h $(KERNEL_DIR)/apps/notepad.h $(KERNEL_DIR)/apps/browser.h $(KERNEL_DIR)/apps/diskmgr.h $(KERNEL_DIR)/apps/settings.h $(KERNEL_DIR)/apps/sysmon.h
 $(BUILD_DIR)/audio.o: $(KERNEL_DIR)/audio.c $(KERNEL_DIR)/audio.h $(KERNEL_DIR)/io.h
+$(BUILD_DIR)/disk.o: $(KERNEL_DIR)/disk.c $(KERNEL_DIR)/disk.h $(KERNEL_DIR)/io.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h
+$(BUILD_DIR)/network.o: $(KERNEL_DIR)/network.c $(KERNEL_DIR)/network.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h
+$(BUILD_DIR)/gui.o: $(KERNEL_DIR)/gui.c $(KERNEL_DIR)/gui.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/keyboard.h
 $(BUILD_DIR)/apps/notepad.o: $(KERNEL_DIR)/apps/notepad.c $(KERNEL_DIR)/apps/notepad.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/io.h
 $(BUILD_DIR)/apps/css.o: $(KERNEL_DIR)/apps/css.c $(KERNEL_DIR)/apps/css.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/string.h
 $(BUILD_DIR)/apps/javascript.o: $(KERNEL_DIR)/apps/javascript.c $(KERNEL_DIR)/apps/javascript.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h
 $(BUILD_DIR)/apps/browser.o: $(KERNEL_DIR)/apps/browser.c $(KERNEL_DIR)/apps/browser.h $(KERNEL_DIR)/apps/css.h $(KERNEL_DIR)/apps/javascript.h $(KERNEL_DIR)/audio.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/io.h
+$(BUILD_DIR)/apps/diskmgr.o: $(KERNEL_DIR)/apps/diskmgr.c $(KERNEL_DIR)/apps/diskmgr.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/disk.h $(KERNEL_DIR)/gui.h
+$(BUILD_DIR)/apps/settings.o: $(KERNEL_DIR)/apps/settings.c $(KERNEL_DIR)/apps/settings.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/audio.h $(KERNEL_DIR)/network.h $(KERNEL_DIR)/gui.h
+$(BUILD_DIR)/apps/sysmon.o: $(KERNEL_DIR)/apps/sysmon.c $(KERNEL_DIR)/apps/sysmon.h $(KERNEL_DIR)/vga.h $(KERNEL_DIR)/keyboard.h $(KERNEL_DIR)/string.h $(KERNEL_DIR)/memory.h $(KERNEL_DIR)/disk.h $(KERNEL_DIR)/network.h $(KERNEL_DIR)/audio.h

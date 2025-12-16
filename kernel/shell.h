@@ -9,7 +9,10 @@ typedef enum {
     APP_NONE = 0,
     APP_SHELL,
     APP_NOTEPAD,
-    APP_BROWSER
+    APP_BROWSER,
+    APP_DISKMGR,
+    APP_SETTINGS,
+    APP_SYSMON
 } app_type_t;
 
 // Initialize shell
