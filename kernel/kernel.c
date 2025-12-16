@@ -11,6 +11,10 @@
 #include "string.h"
 #include "shell.h"
 #include "io.h"
+#include "disk.h"
+#include "network.h"
+#include "gui.h"
+#include "audio.h"
 
 void kernel_panic(const char* message) {
     cli();
@@ -63,6 +67,26 @@ void kernel_main(uint32_t magic, uint32_t* mboot_info) {
     keyboard_init();
     vga_puts("[OK] Keyboard initialized\n");
     
+    // Initialize disk subsystem
+    vga_puts("[..] Initializing disk subsystem...\n");
+    disk_init();
+    vga_printf("[OK] Detected %d disk(s)\n", disk_get_count());
+    
+    // Initialize network subsystem
+    vga_puts("[..] Initializing network...\n");
+    network_init();
+    vga_puts("[OK] Network initialized (WiFi simulated)\n");
+    
+    // Initialize audio
+    vga_puts("[..] Initializing audio...\n");
+    audio_init();
+    vga_puts("[OK] Audio initialized (PC Speaker)\n");
+    
+    // Initialize GUI subsystem
+    vga_puts("[..] Initializing GUI...\n");
+    gui_init();
+    vga_puts("[OK] GUI initialized\n");
+    
     // Enable interrupts
     vga_puts("[..] Enabling interrupts...\n");
     sti();
@@ -76,6 +100,9 @@ void kernel_main(uint32_t magic, uint32_t* mboot_info) {
     vga_puts("=================================\n");
     vga_set_color(vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK));
     vga_puts("\nPress any key to start shell...\n");
+    
+    // Play startup sound
+    audio_play_effect(SFX_STARTUP);
     
     // Wait for keypress
     keyboard_getchar();
