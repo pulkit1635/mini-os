@@ -37,9 +37,17 @@ void memory_init(void* start, size_t size) {
     free_list->prev = NULL;
 }
 
-// Validate a block's magic number
+// Validate a block's magic number (with bounds checking)
 static bool validate_block(memory_block_t* block) {
     if (block == NULL) return false;
+    
+    // Check if block is within heap bounds before dereferencing
+    if ((uint8_t*)block < heap_start || 
+        (uint8_t*)block >= heap_end ||
+        (uint8_t*)block + sizeof(memory_block_t) > heap_end) {
+        return false;
+    }
+    
     return (block->magic == MEMORY_BLOCK_MAGIC || 
             block->magic == MEMORY_BLOCK_FREE_MAGIC);
 }
