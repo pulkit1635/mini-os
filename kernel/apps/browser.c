@@ -8,6 +8,8 @@
 #include "../io.h"
 #include "../audio.h"
 
+// Text-mode browser: renders simple HTML/CSS/JS into VGA, with a tiny DOM and link navigation.
+
 #define CONTENT_START_Y 2
 #define STATUSBAR_Y (VGA_HEIGHT - 1)
 #define CONTENT_HEIGHT (VGA_HEIGHT - 3)
