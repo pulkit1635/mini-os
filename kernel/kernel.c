@@ -12,6 +12,14 @@
 #include "shell.h"
 #include "io.h"
 
+// Provided by the linker; marks the end of the kernel image
+extern uint32_t _kernel_end;
+
+// Align a value up to the nearest 4 KB boundary
+static inline uint32_t align4k(uint32_t addr) {
+    return (addr + 0xFFF) & ~0xFFF;
+}
+
 void kernel_panic(const char* message) {
     cli();
     
@@ -55,8 +63,9 @@ void kernel_main(uint32_t magic, uint32_t* mboot_info) {
     
     // Initialize memory manager
     vga_puts("[..] Initializing memory manager...\n");
-    memory_init((void*)KERNEL_HEAP_START, KERNEL_HEAP_SIZE);
-    vga_printf("[OK] Heap: %u bytes at 0x%X\n", KERNEL_HEAP_SIZE, KERNEL_HEAP_START);
+    uint32_t heap_start = align4k((uint32_t)&_kernel_end);
+    memory_init((void*)heap_start, KERNEL_HEAP_SIZE);
+    vga_printf("[OK] Heap: %u bytes at 0x%X (kernel end 0x%X)\n", KERNEL_HEAP_SIZE, heap_start, (uint32_t)&_kernel_end);
     
     // Initialize keyboard
     vga_puts("[..] Initializing keyboard...\n");

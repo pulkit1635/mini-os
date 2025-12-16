@@ -13,8 +13,7 @@
 #define KERNEL_VERSION_MINOR 0
 #define KERNEL_VERSION_PATCH 0
 
-// Heap configuration
-#define KERNEL_HEAP_START 0x100000    // 1 MB
+// Heap configuration (size is fixed, start is computed at runtime)
 #define KERNEL_HEAP_SIZE  0x400000    // 4 MB
 
 // Function declarations
