@@ -64,6 +64,53 @@ char scancode_to_ascii(uint8_t scancode, bool shift) {
     return shift ? scancode_ascii_upper[scancode] : scancode_ascii_lower[scancode];
 }
 
+// Polling fallback for environments where keyboard IRQ1 may not fire (e.g., misconfigured firmware)
+char keyboard_wait_char_poll(void) {
+    for (;;) {
+        // Prefer buffered key first
+        if (keyboard_has_key()) {
+            key_event_t event = keyboard_get_key();
+            if (!event.released && event.ascii != 0) {
+                return event.ascii;
+            }
+        }
+
+        // Directly poll the controller
+        uint8_t status = inb(0x64);
+        if (status & 0x01) {
+            uint8_t scancode = inb(0x60);
+            bool released = (scancode & 0x80) != 0;
+            uint8_t key = scancode & 0x7F;
+
+            // Update modifiers similar to the IRQ handler
+            switch (key) {
+                case KEY_LSHIFT:
+                case KEY_RSHIFT:
+                    shift_held = !released;
+                    continue;
+                case KEY_LCTRL:
+                    ctrl_held = !released;
+                    continue;
+                case KEY_LALT:
+                    alt_held = !released;
+                    continue;
+                case KEY_CAPSLOCK:
+                    if (!released) {
+                        capslock_on = !capslock_on;
+                    }
+                    continue;
+            }
+
+            if (!released) {
+                char ascii = scancode_to_ascii(key, shift_held);
+                if (ascii != 0) {
+                    return ascii;
+                }
+            }
+        }
+    }
+}
+
 static void keyboard_handler(registers_t* regs) {
     (void)regs;
     

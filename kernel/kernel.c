@@ -113,8 +113,8 @@ void kernel_main(uint32_t magic, uint32_t* mboot_info) {
     // Play startup sound
     audio_play_effect(SFX_STARTUP);
     
-    // Wait for keypress
-    keyboard_getchar();
+    // Wait for keypress (fallback to polling in case IRQ1 isn't firing)
+    keyboard_wait_char_poll();
     
     // Start shell
     shell_init();

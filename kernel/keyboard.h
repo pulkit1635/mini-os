@@ -70,6 +70,12 @@ bool keyboard_try_get_key(key_event_t* event);
 // Get ASCII character (blocking)
 char keyboard_getchar(void);
 
+// Fallback: poll controller until a key is pressed (for systems where IRQ1 is not firing)
+char keyboard_wait_char_poll(void);
+
+// Convert scancode to ASCII using current shift/caps state
+char scancode_to_ascii(uint8_t scancode, bool shift);
+
 // Check if shift is held
 bool keyboard_shift_held(void);
 
