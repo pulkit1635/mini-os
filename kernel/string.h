@@ -25,6 +25,9 @@ char* strcat(char* dest, const char* src);
 // Find character in string
 char* strchr(const char* str, int c);
 
+// Find substring in string
+char* strstr(const char* haystack, const char* needle);
+
 // Memory set
 void* memset(void* ptr, int value, size_t num);
 

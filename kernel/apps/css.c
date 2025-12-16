@@ -2,6 +2,9 @@
 #include "../string.h"
 #include "../memory.h"
 
+// Forward declaration
+static const char* css_strstr(const char* haystack, const char* needle);
+
 // CSS color name to VGA color mapping
 static const css_color_map_t color_map[] = {
     {"black", VGA_COLOR_BLACK},
@@ -342,7 +345,7 @@ bool css_parse_inline(const char* style_attr, css_computed_style_t* style) {
                                    strcmp(prop_value, "oblique") == 0);
                     break;
                 case CSS_PROP_TEXT_DECORATION:
-                    style->underline = (strstr(prop_value, "underline") != NULL);
+                    style->underline = (css_strstr(prop_value, "underline") != NULL);
                     break;
                 case CSS_PROP_TEXT_ALIGN:
                     if (strcmp(prop_value, "center") == 0) style->text_align = 1;

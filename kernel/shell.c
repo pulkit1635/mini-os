@@ -3,6 +3,7 @@
 #include "keyboard.h"
 #include "string.h"
 #include "memory.h"
+#include "io.h"
 #include "apps/notepad.h"
 #include "apps/browser.h"
 
