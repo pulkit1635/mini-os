@@ -323,8 +323,7 @@ static js_value_t call_function(js_context_t* ctx, const char* name, const char*
             
             ctx->call_depth++;
             
-            // TODO: Parse parameters and bind to arguments
-            // For now, just execute the body
+            // User-defined functions currently ignore parameter lists and just run the stored body
             const char* body = ctx->functions[i].body;
             js_value_t result = js_execute(ctx, body);
             

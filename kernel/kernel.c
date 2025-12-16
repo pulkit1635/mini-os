@@ -1,6 +1,6 @@
 /*
  * MiniOS Kernel
- * A simple operating system with shell, notepad, and browser
+ * Brings the machine up, wires interrupts, and hands control to the shell apps.
  */
 
 #include "kernel.h"
@@ -11,9 +11,6 @@
 #include "string.h"
 #include "shell.h"
 #include "io.h"
-
-// Forward declaration for inb used in shell.c
-uint8_t inb(uint16_t port);
 
 void kernel_panic(const char* message) {
     cli();

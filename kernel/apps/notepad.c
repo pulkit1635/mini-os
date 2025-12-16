@@ -5,20 +5,22 @@
 #include "../memory.h"
 #include "../io.h"
 
-// Document buffer
+// Lightweight text editor that keeps everything in memory and draws directly to VGA.
+
+// In-memory document the user is editing
 static char document[NOTEPAD_MAX_SIZE];
 static int doc_length = 0;
 
-// Line information
+// Line starts to make cursor math fast
 static int line_starts[NOTEPAD_MAX_LINES];
 static int line_count = 0;
 
-// Cursor position (in document)
+// Cursor tracked both as a flat index and as screen coordinates
 static int cursor_pos = 0;
 static int cursor_x = 0;
 static int cursor_y = 0;
 
-// View offset (for scrolling)
+// Which line of the document is at the top of the viewport
 static int view_offset_y = 0;
 
 // Editor area
@@ -26,7 +28,7 @@ static int view_offset_y = 0;
 #define EDIT_END_Y (VGA_HEIGHT - 2)
 #define EDIT_HEIGHT (EDIT_END_Y - EDIT_START_Y)
 
-// Recalculate line starts
+// Rebuild the line index after any edit
 static void recalc_lines(void) {
     line_count = 1;
     line_starts[0] = 0;
@@ -38,7 +40,7 @@ static void recalc_lines(void) {
     }
 }
 
-// Get line length
+// Length of a specific line in characters
 static int get_line_length(int line) {
     if (line < 0 || line >= line_count) return 0;
     
