@@ -96,6 +96,9 @@ void kernel_main(uint32_t magic, uint32_t* mboot_info) {
     gui_init();
     vga_puts("[OK] GUI initialized\n");
     
+    // Mask timer interrupt (IRQ0) to prevent constant interrupts during early boot
+    outb(0x21, inb(0x21) | 0x01);  // Set bit 0 in master PIC mask register
+    
     // Enable interrupts
     vga_puts("[..] Enabling interrupts...\n");
     sti();

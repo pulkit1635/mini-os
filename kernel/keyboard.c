@@ -111,13 +111,11 @@ char keyboard_wait_char_poll(void) {
     }
 }
 
-static void keyboard_handler(registers_t* regs) {
-    (void)regs;
-    
-    uint8_t scancode = inb(0x60);
+// Common scancode processing, used by IRQ and polling fallback
+static void keyboard_handle_scancode(uint8_t scancode) {
     bool released = (scancode & KEY_RELEASED) != 0;
     uint8_t key = scancode & 0x7F;
-    
+
     // Handle modifier keys
     switch (key) {
         case KEY_LSHIFT:
@@ -136,7 +134,7 @@ static void keyboard_handler(registers_t* regs) {
             }
             return;
     }
-    
+
     // Add to buffer if not full
     if (buffer_count < KEYBOARD_BUFFER_SIZE) {
         key_event_t event;
@@ -146,11 +144,16 @@ static void keyboard_handler(registers_t* regs) {
         event.ctrl = ctrl_held;
         event.alt = alt_held;
         event.released = released;
-        
+
         key_buffer[buffer_end] = event;
         buffer_end = (buffer_end + 1) % KEYBOARD_BUFFER_SIZE;
         buffer_count++;
     }
+}
+
+static void keyboard_handler(registers_t* regs) {
+    (void)regs;
+    keyboard_handle_scancode(inb(0x60));
 }
 
 void keyboard_init(void) {
@@ -175,6 +178,12 @@ bool keyboard_has_key(void) {
 key_event_t keyboard_get_key(void) {
     // Wait for key
     while (buffer_count == 0) {
+        // Poll as a fallback in case IRQ1 is masked by firmware/host
+        uint8_t status = inb(0x64);
+        if (status & 0x01) {
+            keyboard_handle_scancode(inb(0x60));
+            if (buffer_count > 0) break;
+        }
         hlt();  // Wait for interrupt
     }
     
