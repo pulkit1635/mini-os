@@ -14,7 +14,7 @@ To build the OS you need:
 - **NASM** - Netwide Assembler for bootloader
 - **GCC Cross-Compiler** (i686-elf-gcc) - For kernel compilation
 - **QEMU** - For testing the OS
-- **xorriso** or **mkisofs** - For creating bootable ISO
+- **xorriso** and **mtools** - For creating bootable ISO
 
 ### Windows Setup (using WSL or MinGW)
 
@@ -23,7 +23,7 @@ To build the OS you need:
 ```bash
 # Ubuntu/WSL
 sudo apt update
-sudo apt install nasm gcc make qemu-system-x86 xorriso grub-pc-bin grub-common
+sudo apt install nasm gcc make qemu-system-x86 xorriso mtools grub-pc-bin grub-common
 
 # For cross-compiler (recommended)
 sudo apt install gcc-multilib

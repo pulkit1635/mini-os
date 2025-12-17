@@ -56,28 +56,41 @@ $CC $CFLAGS -Ikernel -c kernel/idt.c -o build/idt.o
 $CC $CFLAGS -Ikernel -c kernel/keyboard.c -o build/keyboard.o
 $CC $CFLAGS -Ikernel -c kernel/memory.c -o build/memory.o
 $CC $CFLAGS -Ikernel -c kernel/audio.c -o build/audio.o
+$CC $CFLAGS -Ikernel -c kernel/disk.c -o build/disk.o
+$CC $CFLAGS -Ikernel -c kernel/network.c -o build/network.o
+$CC $CFLAGS -Ikernel -c kernel/gui.c -o build/gui.o
 $CC $CFLAGS -Ikernel -c kernel/shell.c -o build/shell.o
 $CC $CFLAGS -Ikernel -c kernel/apps/notepad.c -o build/apps/notepad.o
 $CC $CFLAGS -Ikernel -c kernel/apps/css.c -o build/apps/css.o
 $CC $CFLAGS -Ikernel -c kernel/apps/javascript.c -o build/apps/javascript.o
 $CC $CFLAGS -Ikernel -c kernel/apps/browser.c -o build/apps/browser.o
+$CC $CFLAGS -Ikernel -c kernel/apps/diskmgr.c -o build/apps/diskmgr.o
+$CC $CFLAGS -Ikernel -c kernel/apps/settings.c -o build/apps/settings.o
+$CC $CFLAGS -Ikernel -c kernel/apps/sysmon.c -o build/apps/sysmon.o
 $CC $CFLAGS -Ikernel -c kernel/kernel.c -o build/kernel.o
 echo "[OK] All C files compiled"
 
 echo "[BUILD] Linking kernel..."
 $LD $LDFLAGS -o build/kernel.bin \
     build/boot.o \
-    build/string.o \
+    build/kernel.o \
     build/vga.o \
     build/idt.o \
     build/keyboard.o \
     build/memory.o \
+    build/string.o \
     build/audio.o \
+    build/disk.o \
+    build/network.o \
+    build/gui.o \
     build/shell.o \
     build/apps/notepad.o \
     build/apps/css.o \
     build/apps/javascript.o \
-    build/apps/browser.o
+    build/apps/browser.o \
+    build/apps/diskmgr.o \
+    build/apps/settings.o \
+    build/apps/sysmon.o
 echo "[OK] kernel.bin created"
 
 # Create ISO if requested

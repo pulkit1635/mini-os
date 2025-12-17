@@ -14,7 +14,7 @@
 3. **In WSL2 Ubuntu terminal, install tools:**
    ```bash
    sudo apt update
-   sudo apt install -y nasm gcc make qemu-system-x86 xorriso grub-pc-bin grub-common gcc-multilib
+   sudo apt install -y nasm gcc make qemu-system-x86 xorriso mtools grub-pc-bin grub-common gcc-multilib
    ```
 
 4. **Navigate to project and build:**
@@ -50,7 +50,7 @@
    ```powershell
    docker run -it --rm -v ${PWD}:/os -w /os ubuntu:22.04 bash -c "
      apt update && 
-     apt install -y nasm gcc make qemu-system-x86 xorriso grub-pc-bin grub-common gcc-multilib &&
+         apt install -y nasm gcc make qemu-system-x86 xorriso mtools grub-pc-bin grub-common gcc-multilib &&
      chmod +x build.sh &&
      ./build.sh iso
    "
@@ -142,7 +142,7 @@ Install NASM:
 ### "grub-mkrescue not found"
 This is only needed for ISO creation:
 ```bash
-sudo apt install grub-pc-bin grub-common xorriso
+sudo apt install grub-pc-bin grub-common xorriso mtools
 ```
 
 ### "Cannot run 32-bit code"
